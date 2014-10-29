@@ -5,51 +5,43 @@ As the title says, CGTerm is an open source, platform independent
 terminal program for C/G telnet BBS:s. It's supposed to compile and
 run on any POSIX compliant OS with the SDL library installed.
 
-
 Installation (UNIX)
 -------------------
 
 First, download and install the SDL library if it's not included with
 your OS:
 
-  http://www.libsdl.org/download-1.2.php
+    http://www.libsdl.org/download-1.2.php
 
 Edit the supplied Makefile as needed, then run make, and make install.
-
 
 Usage
 -----
 
-  cgterm [-d delay] [-f] [-k keyboard.kbd] [-o logfile] [-r seconds]
-  [-s] [-z zoom] [host [port]]
+    cgterm [-d delay] [-f] [-k keyboard.kbd] [-o logfile] [-r seconds]
+    [-s] [-z zoom] [host [port]]
 
 CGTerm looks for options in the following order: first it uses
 anything specified on the command line, then it tries to read options
-from a file called .cgtermrc in your home directory, and if that fails
+from a file called `.cgtermrc` in your home directory, and if that fails
 it tries to read from the system configuration file. The available
 options are:
 
-	Config Key    Switch	Action
-
-	senddelay	-d	Delay between sent characters in
-				milliseconds (default: 0)
-	fullscreen	-f	Fullscreen mode
-	keyboard	-k	Select keyboard configuration file
-				(default: keyboard.kbd)
-	logfile		-o	Save window output
-	zoom		-z	Window zoom factor (default: 2)
-	reconnect	-r	Reconnect if disconnected within N
-				seconds (default: 0 = off)
-	host	      1st arg	Host to connect to
-	port	      2nd arg	Port to connect to (default: 23)
-	localecho     	  	Enable local echo (default: no)
-	sound		-s	Enable sound playback (default: yes)
-	columns	       -4/-8	40 or 80 columns (default: 40)
-	xferdir			Path to where you want to save file
-				downloads.
-	bookmark		Add a host to the bookmark menu. Use
-				the format alias, host, port.
-
+Config Key  | Switch  | Action
+------------|---------|-------------------------------------------------------------------
+senddelay   | -d      | Delay between sent characters in milliseconds (default: 0)
+fullscreen  | -f      | Fullscreen mode
+keyboard    | -k      | Select keyboard configuration file (default: `keyboard.kbd`)
+logfile     | -o      | Save window output
+zoom        | -z      | Window zoom factor (default: 2)
+reconnect   | -r      | Reconnect if disconnected within N seconds (default: 0 = off)
+host        | 1st arg | Host to connect to
+port        | 2nd arg | Port to connect to (default: 23)
+localecho   |         | Enable local echo (default: no)
+sound       | -s      | Enable sound playback (default: yes)
+columns     | -4/-8   | 40 or 80 columns (default: 40)
+xferdir     |         | Path to where you want to save file downloads.
+bookmark    |         | Add a host to the bookmark menu. Use the format alias, host, port.
 
 Hotkeys
 -------
@@ -58,26 +50,25 @@ Certain program functions can be activated with hotkeys. These are
 bound to the Meta key (a.k.a. Command key) plus another key. You can
 also bring up a menu with Escape.
 
-       Key	Action
-
-	A	Abort loading or macro playback
-	B	Open bookmarks
-	C	Start/stop recording macro
-	D	Connect/disconnect
-	E	Toggle local echo
-	F	Toggle fullscreen mode
-	I	Set transfer dir or disk image
-	L	Load SEQ file
-	Q	Quit CGTerm
-	R	Reconnect to last host
-	S	Save screenshot to SEQ file
-	T	Transfer files
-	V	Play recorded macro
-       Alt	Toggle lower/upper case font
+Key | Action
+----|--------------------------------
+A   | Abort loading or macro playback
+B   | Open bookmarks
+C   | Start/stop recording macro
+D   | Connect/disconnect
+E   | Toggle local echo
+F   | Toggle fullscreen mode
+I   | Set transfer dir or disk image
+L   | Load SEQ file
+Q   | Quit CGTerm
+R   | Reconnect to last host
+S   | Save screenshot to SEQ file
+T   | Transfer files
+V   | Play recorded macro
+Alt | Toggle lower/upper case font
 
 The scrollback buffer can be accessed with the Page Up and Page Down
 keys.
-
 
 Keyboards
 ---------
@@ -99,23 +90,21 @@ testkbd program. Just hit a key and it'll print the keysym for
 you. Once you've created a working configuration, please send it to me
 so that I can include it in the next update.
 
-
 File Transfer
 -------------
 
 CGTerm can receive files with the following protocols:
 
-  Punter
-  Xmodem
-  Xmodem/CRC
-  Xmodem-1k
+* Punter
+* Xmodem
+* Xmodem/CRC
+* Xmodem-1k
 
 and it can upload files with the following protocols:
 
-  Xmodem
-  Xmodem/CRC
-  Xmodem-1k
-
+* Xmodem
+* Xmodem/CRC
+* Xmodem-1k
 
 Acknowledgements
 ----------------
@@ -131,44 +120,38 @@ As the title says, CGChat is an open source, platform independent
 client for 64CHAT. It's supposed to compile and run on any POSIX
 compliant OS with the SDL library installed.
 
-
 Installation (UNIX)
 -------------------
 
 First, download and install the SDL library if it's not included with
 your OS:
 
-  http://www.libsdl.org/download-1.2.php
+    http://www.libsdl.org/download-1.2.php
 
 Edit the supplied Makefile as needed, then run make, and make install.
-
 
 Usage
 -----
 
-  cgchat [-4|-8] [-f] [-k keyboard.kbd] [-s] [-z zoom] [host [port]]
+    cgchat [-4|-8] [-f] [-k keyboard.kbd] [-s] [-z zoom] [host [port]]
 
 CGChat looks for options in the following order: first it uses
 anything specified on the command line, then it tries to read options
-from a file called .cgchatrc in your home directory, and if that fails
+from a file called `.cgchatrc` in your home directory, and if that fails
 it tries to read from the system configuration file. The available
 options are:
 
-	Config Key    Switch	Action
-
-	fullscreen	-f	Fullscreen mode
-	keyboard	-k	Select keyboard configuration file
-				(default: keyboard.kbd)
-	zoom		-z	Window zoom factor (default: 2)
-	reconnect	-r	Reconnect if disconnected within N
-				seconds (default: 0 = off)
-	host	      1st arg	Host to connect to
-	port	      2nd arg	Port to connect to (default: 23)
-	sound		-s	Enable sound playback (default: yes)
-	columns	       -4/-8	40 or 80 columns (default: 40)
-	bookmark		Add a host to the bookmark menu. Use
-				the format alias, host, port.
-
+Config Key  | Switch  | Action
+------------|---------|-------------------------------------------------------------------
+fullscreen  | -f      | Fullscreen mode
+keyboard    | -k      | Select keyboard configuration file (default: `keyboard.kbd`)
+zoom        | -z      | Window zoom factor (default: 2)
+reconnect   | -r      | Reconnect if disconnected within N seconds (default: 0 = off)
+host        | 1st arg | Host to connect to
+port        | 2nd arg | Port to connect to (default: 23)
+sound       | -s      | Enable sound playback (default: yes)
+columns     | -4/-8   | 40 or 80 columns (default: 40)
+bookmark    |         | Add a host to the bookmark menu. Use the format alias, host, port.
 
 Hotkeys
 -------
@@ -177,23 +160,22 @@ Certain program functions can be activated with hotkeys. These are
 bound to the Meta key (a.k.a. Command key) plus another key. You can
 also bring up a menu with Escape.
 
-       Key	Action
-
-	A	Abort loading or macro playback
-	B	Open bookmarks
-	C	Start/stop recording macro
-	D	Connect/disconnect
-	F	Toggle fullscreen mode
-	L	Load SEQ file
-	Q	Quit CGChat
-	R	Reconnect to last host
-	S	Save screenshot to SEQ file
-	V	Play recorded macro
-       Alt	Toggle lower/upper case font
+Key | Action
+----|--------------------------------
+A   | Abort loading or macro playback
+B   | Open bookmarks
+C   | Start/stop recording macro
+D   | Connect/disconnect
+F   | Toggle fullscreen mode
+L   | Load SEQ file
+Q   | Quit CGTerm
+R   | Reconnect to last host
+S   | Save screenshot to SEQ file
+V   | Play recorded macro
+Alt | Toggle lower/upper case font
 
 The scrollback buffer can be accessed with the Page Up and Page Down
 keys.
-
 
 Keyboards
 ---------
@@ -204,7 +186,6 @@ Contact
 -------
 
 You can email me at MagerValp@cling.gu.se.
-
 
 License
 -------
@@ -218,13 +199,13 @@ Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
 
-    * Redistributions of source code must retain the above copyright
-      notice, this list of conditions and the following disclaimer.
+* Redistributions of source code must retain the above copyright
+  notice, this list of conditions and the following disclaimer.
 
-    * Redistributions in binary form must reproduce the above
-      copyright notice, this list of conditions and the following
-      disclaimer in the documentation and/or other materials provided
-      with the distribution.
+* Redistributions in binary form must reproduce the above
+  copyright notice, this list of conditions and the following
+  disclaimer in the documentation and/or other materials provided
+  with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT

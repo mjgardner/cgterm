@@ -1,4 +1,4 @@
-CGTerm 1.6 - a platform independent C/G terminal
+CGTerm - a platform independent C/G terminal
 ================================================
 
 As the title says, CGTerm is an open source, platform independent
@@ -111,7 +111,7 @@ Thanks to David Holz, Ullrich von Bassewitz, and Morphfrog for source
 patches. Thanks to Taper/3AD for running a BBS that makes it all worth
 it. Thanks also to all the beta testers.
 
-CGChat 1.6 - a platform independent 64CHAT client
+CGChat - a platform independent 64CHAT client
 =================================================
 
 As the title says, CGChat is an open source, platform independent

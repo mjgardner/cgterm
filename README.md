@@ -8,12 +8,10 @@ run on any POSIX compliant OS with the SDL library installed.
 Installation (UNIX)
 -------------------
 
-First, download and install the SDL library if it's not included with
-your OS:
+First, download and install the [SDL library](http://www.libsdl.org/download-1.2.php)
+if it's not included with your OS.
 
-    http://www.libsdl.org/download-1.2.php
-
-Edit the supplied Makefile as needed, then run make, and make install.
+Edit the supplied `Makefile` as needed, then run `make`, and `make install`.
 
 Usage
 -----
@@ -86,7 +84,7 @@ the config file and CGTerm will use it automatically. If you're not so
 lucky, you'll need to create your own. The configuration file contains
 two columns: a named C64 key to the left, and a keysym number to the
 right. To find out the keysym number of a key, use the supplied
-testkbd program. Just hit a key and it'll print the keysym for
+`testkbd` program. Just hit a key and it'll print the keysym for
 you. Once you've created a working configuration, please send it to me
 so that I can include it in the next update.
 
@@ -123,12 +121,10 @@ compliant OS with the SDL library installed.
 Installation (UNIX)
 -------------------
 
-First, download and install the SDL library if it's not included with
-your OS:
+First, download and install the [SDL library](http://www.libsdl.org/download-1.2.php)
+if it's not included with your OS.
 
-    http://www.libsdl.org/download-1.2.php
-
-Edit the supplied Makefile as needed, then run make, and make install.
+Edit the supplied `Makefile` as needed, then run `make`, and `make install`.
 
 Usage
 -----

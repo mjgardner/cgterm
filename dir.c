@@ -42,8 +42,7 @@ Dir *dir_read_image(DiskImage *di) {
 
   if ((dir = malloc(sizeof(*dir))) == NULL) {
     printf("couldn't allocate dir structure\n");
-    di_close(fh);
-    return(NULL);
+    goto ReadDirDone;
   }
 
   dir->numentries = 0;
@@ -55,7 +54,7 @@ Dir *dir_read_image(DiskImage *di) {
     goto ReadDirDone;
   }
 
-  dir->title = make_name(buffer + 144 - 2);
+  dir->title = make_name(di_title(di));
 
   // add ..
   if ((dir->firstentry = malloc(sizeof(*(dir->firstentry)))) == NULL) {
@@ -109,6 +108,7 @@ Dir *dir_read_image(DiskImage *di) {
   }
 
  ReadDirDone:
+  di_close(fh);
   return(dir);
 }
 

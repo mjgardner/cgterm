@@ -22,6 +22,7 @@ void menu_draw_xfer(void);
 void menu_update_xfer(int direction, int protocol);
 void menu_draw_xfer_progress(char *filename, int direction, int protocol);
 void menu_update_xfer_progress(char *message, int bytes, int total);
+void menu_draw_rectangle(void);
 void menu_draw_message(char *message);
 void menu_draw_bookmarks(void);
 void menu_fs_draw(char *title);

@@ -145,7 +145,7 @@ int main(int argc, char *argv[]) {
   if (crc_init()) {
     return(1);
   }
-  if (gfx_init(cfg_zoom, cfg_fullscreen, "CGChat")) {
+  if (gfx_init(cfg_fullscreen, "CGChat")) {
     return(1);
   }
   if (kbd_init(cfg_keyboard)) {

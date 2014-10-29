@@ -121,8 +121,12 @@ void ui_inputkey(SDL_keysym *keysym) {
   case SDLK_RETURN:
   case SDLK_KP_ENTER:
     menu_hide();
-    kbd_focus = input_focus;
-    input_done_call(input_buffer);
+    if (input_len) {
+      kbd_focus = input_focus;
+      input_done_call(input_buffer);
+    } else {
+      kbd_focus = FOCUS_TERM; // maybe
+    }
     break;
 
   case SDLK_ESCAPE:

@@ -1,9 +1,19 @@
 Todo
 ----
 
- * Fix CR/LF in Windows distro
  * File upload with Punter
  * Better macros
+ * Native keyboard
+ * Bookmark editing
+
+
+CGTerm 1.7
+----------
+
+ * Fixed default keyboard
+ * Fixed d71 and d81 handling
+ * Added CGEdit
+ * Updated address book defaults
 
 
 CGTerm 1.6

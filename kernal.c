@@ -161,22 +161,22 @@ void ffd2(unsigned char a) {
 
   case 8:
     enableshiftcbm = 0;
+    /* printf("shift+cbm disabled\n"); */
     break;
 
   case 9:
     enableshiftcbm = 1;
+    /* printf("shift+cbm enabled\n"); */
     break;
 
   case 14:
-    if (enableshiftcbm) {
-      gfx_setfont(1);
-    }
+    gfx_setfont(1);
+    /* printf("switching to lower case\n"); */
     break;
 
   case 142:
-    if (enableshiftcbm) {
-      gfx_setfont(0);
-    }
+    gfx_setfont(0);
+    /* printf("switching to upper case\n"); */
     break;
 
   case 18:
@@ -203,7 +203,7 @@ void ffd2(unsigned char a) {
   default:
     if ((a >= 32 && a <= 127) || (a >= 160)) {
       gfx_draw_char(screencode[a] + rvson * 128);
-      gfx_cursright();
+      gfx_cursadvance();
     }
     break;
 

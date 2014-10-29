@@ -120,7 +120,7 @@ and it can upload files with the following protocols:
 Acknowledgements
 ----------------
 
-Thanks to David Holz, Ullrich von Bassewitz, and Morphrog for source
+Thanks to David Holz, Ullrich von Bassewitz, and Morphfrog for source
 patches. Thanks to Taper/3AD for running a BBS that makes it all worth
 it. Thanks also to all the beta testers.
 

@@ -22,6 +22,7 @@ extern char *cfg_bookmark_alias[];
 extern char *cfg_bookmark_host[];
 extern int cfg_bookmark_port[];
 extern char cfg_xferdir[];
+extern int cfg_editmode;
 
 
 int cfg_init(char *argv0);

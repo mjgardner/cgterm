@@ -376,6 +376,23 @@ void menu_draw_xfer_progress(char *filename, int direction, int protocol) {
 }
 
 
+void menu_draw_rectangle(void) {
+  menu_cls();
+  menu_draw_borderbox(67, 57, menu_width - 68, menu_height - 48);
+  font_set_font(menu_font[1]);
+  font_draw_string(108, 70, "Rectangle");
+  font_draw_string(80, 90, " S  ");
+  font_draw_string(80, 102, " X  ");
+  font_draw_string(80, 114, " C  ");
+  font_draw_string(80, 126, " V  ");
+  font_set_font(menu_font[0]);
+  font_draw_string(112, 90, "Set corner");
+  font_draw_string(112, 102, "Cut");
+  font_draw_string(112, 114, "Copy");
+  font_draw_string(112, 126, "Paste");
+}
+
+
 void menu_draw_message(char *message) {
   menu_cls();
   menu_draw_borderbox(7, 87, menu_width - 8, menu_height - 88);

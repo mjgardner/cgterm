@@ -26,7 +26,7 @@ unsigned int cfg_port = 23;
 #ifdef WINDOWS
 char *cfg_keyboard = "windows.kbd";
 #else
-char *cfg_keyboard = PREFIX "/share/cgterm/keyboard.kbd";
+char *cfg_keyboard = PREFIX "/share/cgterm/us.kbd";
 #endif
 int cfg_zoom = 2;
 char *cfg_logfile = NULL;
@@ -44,6 +44,7 @@ char *cfg_bookmark_alias[10];
 char *cfg_bookmark_host[10];
 int cfg_bookmark_port[10];
 char cfg_xferdir[256];
+int cfg_editmode = 0;
 
 char host[256];
 char keyboard[256];

@@ -41,6 +41,12 @@ CHATOBJS= \
 	status.o \
 	ui_chat.o
 
+EDITOBJS= \
+	ui_edit.o \
+	fileselector.o \
+	dir.o \
+	diskimage.o
+
 
 %.o: %c
 	$(CC) $(CFLAGS) -c $<
@@ -49,13 +55,16 @@ CHATOBJS= \
 .PHONY: install installdirs clean
 
 
-all: cgterm cgchat testkbd
+all: cgterm cgchat cgedit testkbd
 
 cgterm: cgterm.o $(OBJS) $(TERMOBJS)
 	$(CC) -o cgterm $^ $(LDFLAGS)
 
 cgchat: cgchat.o $(OBJS) $(CHATOBJS)
 	$(CC) -o cgchat $^ $(LDFLAGS)
+
+cgedit: cgedit.o $(OBJS) $(EDITOBJS)
+	$(CC) -o cgedit $^ $(LDFLAGS)
 
 testkbd: testkbd.o
 	$(CC) -o testkbd $^ $(LDFLAGS)
@@ -65,11 +74,12 @@ testimage: testimage.c diskimage.c dir.c
 
 install: all installdirs
 	strip cgterm$(EXESUFFIX)
+	strip cgchat$(EXESUFFIX)
+	strip cgedit$(EXESUFFIX)
 	cp cgterm$(EXESUFFIX) $(PREFIX)/bin/
 	cp cgchat$(EXESUFFIX) $(PREFIX)/bin/
+	cp cgedit$(EXESUFFIX) $(PREFIX)/bin/
 	cp *.bmp *.kbd *.wav $(PREFIX)/share/cgterm/
-#	cp cgterm.cfg $(PREFIX)/etc/
-#	cp cgchat.cfg $(PREFIX)/etc/
 
 installdirs: $(PREFIX)/bin $(PREFIX)/share $(PREFIX)/share/cgterm $(PREFIX)/etc
 
@@ -83,4 +93,4 @@ $(PREFIX)/etc:
 	mkdir $(PREFIX)/etc > /dev/null 2>&1
 
 clean:
-	rm -f cgterm$(EXESUFFIX) cgchat$(EXESUFFIX) testkbd$(EXESUFFIX) *.o *~
+	rm -f cgterm$(EXESUFFIX) cgchat$(EXESUFFIX) cgedit$(EXESUFFIX) testkbd$(EXESUFFIX) *.o *~

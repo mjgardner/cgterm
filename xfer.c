@@ -179,7 +179,7 @@ int xfer_recv(void) {
 int xfer_copy_from_image(char *imgname, char *src, char *dest) {
   DiskImage *di;
   ImageFile *imgfile;
-  unsigned char *rawname;
+  unsigned char rawname[16];
   FILE *outh;
   char buffer[4096];
   int l;
@@ -188,26 +188,20 @@ int xfer_copy_from_image(char *imgname, char *src, char *dest) {
     return(0);
   }
 
-  if ((rawname = di_name_to_rawname(src)) == NULL) {
-    di_free_image(di);
-    return(0);
-  }
+  di_rawname_from_name(rawname, src);
 
   if ((imgfile = di_open(di, rawname, T_PRG, "rb")) == NULL) {
-    free(rawname);
     di_free_image(di);
     return(0);
   }
 
   if ((outh = fopen(dest, "wb")) == NULL) {
-    free(rawname);
     di_close(imgfile);
     di_free_image(di);
   }
 
   while ((l = di_read(imgfile, buffer, 4096))) {
     if (fwrite(buffer, 1, l, outh) != l) {
-      free(rawname);
       di_close(imgfile);
       di_free_image(di);
       fclose(outh);
@@ -215,7 +209,6 @@ int xfer_copy_from_image(char *imgname, char *src, char *dest) {
     }
   }
 
-  free(rawname);
   di_close(imgfile);
   di_free_image(di);
   fclose(outh);
@@ -295,7 +288,7 @@ void xfer_save_file_in_image(char *filename) {
   ImageFile *to;
   unsigned char buf[4096];
   int bytesleft, l;
-  unsigned char *rawname;
+  unsigned char rawname[16];
   
   if ((di = di_load_image(cfg_xferdir)) == NULL) {
     menu_draw_message("Couldn't open disk image");
@@ -311,16 +304,9 @@ void xfer_save_file_in_image(char *filename) {
     return;
   }
 
-  if ((rawname = di_name_to_rawname(filename)) == NULL) {
-    fclose(from);
-    menu_draw_message("Out of memory!");
-    menu_show();
-    gfx_vbl();
-    return;
-  }
+  di_rawname_from_name(rawname, filename);
 
   to = di_open(di, rawname, T_PRG, "wb");
-  free(rawname);
   if (to == NULL) {
     fclose(from);
     di_free_image(di);

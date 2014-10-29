@@ -1,5 +1,3 @@
-#define MAXTRACKS 80
-
 typedef enum imagetype {
   D64 = 1,
   D71,
@@ -28,9 +26,12 @@ typedef struct diskimage {
   unsigned char *image;
   TrackSector bam;
   TrackSector bam2;
+  TrackSector dir;
   int openfiles;
   int blocksfree;
   int modified;
+  int status;
+  TrackSector statusts;
 } DiskImage;
 
 typedef struct rawdirentry {
@@ -60,18 +61,29 @@ typedef struct imagefile {
 
 
 DiskImage *di_load_image(char *name);
+DiskImage *di_create_image(char *name, int size);
 void di_free_image(DiskImage *di);
-int di_sectors_per_track(ImageType type, int track);
-int di_tracks(ImageType type);
-int di_track_blocks_free(DiskImage *di, int track);
+void di_sync(DiskImage *di);
 
-int ts_free(DiskImage *di, TrackSector ts);
-void alloc_ts(DiskImage *di, TrackSector ts);
-void free_ts(DiskImage *di, TrackSector ts);
+int di_status(DiskImage *di, char *status);
 
 ImageFile *di_open(DiskImage *di, unsigned char *rawname, FileType type, char *mode);
 void di_close(ImageFile *imgfile);
 int di_read(ImageFile *imgfile, unsigned char *buffer, int len);
 int di_write(ImageFile *imgfile, unsigned char *buffer, int len);
 
-unsigned char *di_name_to_rawname(char *name);
+int di_format(DiskImage *di, unsigned char *rawname, unsigned char *rawid);
+int di_delete(DiskImage *di, unsigned char *rawpattern, FileType type);
+int di_rename(DiskImage *di, unsigned char *oldrawname, unsigned char *newrawname, FileType type);
+
+int di_sectors_per_track(ImageType type, int track);
+int di_tracks(ImageType type);
+
+unsigned char *di_title(DiskImage *di);
+int di_track_blocks_free(DiskImage *di, int track);
+int di_is_ts_free(DiskImage *di, TrackSector ts);
+void di_alloc_ts(DiskImage *di, TrackSector ts);
+void di_free_ts(DiskImage *di, TrackSector ts);
+
+int di_rawname_from_name(unsigned char *rawname, char *name);
+int di_name_from_rawname(char *name, unsigned char *rawname);

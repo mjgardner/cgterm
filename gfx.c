@@ -14,6 +14,7 @@ unsigned char *gfx_d800 = gfx_d800_buffer;
 int gfx_offset;
 int gfx_maxoffset;
 signed int gfx_cursx, gfx_cursy;
+int gfx_cursdirection;
 
 static int gfx_menu_width;
 static int gfx_menu_height;
@@ -31,9 +32,10 @@ static int borderleft, borderright;
 static Uint8 cursorctr, colorundercursor;
 static SDL_bool cursorvis;
 static SDL_bool dirty[25];
-static Uint8 fgcolor, bgcolor;
+static Uint8 fgcolor = 1, bgcolor = 0;
 static int font;
 static SDL_Surface *fontlist[2];
+static SDL_Surface *rawfont[2];
 static SDL_Color palette[] = {
   {0x00, 0x00, 0x00},
   {0xFD, 0xFE, 0xFC},
@@ -64,7 +66,7 @@ static unsigned char color_to_petscii[] = {
   memcpy(((Uint8 *) surface->pixels) + surface->pitch*(Y) + surface->format->BytesPerPixel*(X), \
 	 &(C), surface->format->BytesPerPixel)
 
-SDL_Surface *gfx_loadfont(char *fontname, int zoom) {
+SDL_Surface *gfx_createfont(SDL_Surface *srcsurface, int zoom) {
   SDL_Surface *tempsurface;
   SDL_Surface *surface;
   Uint8 *sp;
@@ -80,11 +82,6 @@ SDL_Surface *gfx_loadfont(char *fontname, int zoom) {
     return(NULL);
   }
   SDL_SetPalette(surface, SDL_LOGPAL|SDL_PHYSPAL, palette, 0, 16);
-  if ((tempsurface = SDL_LoadBMP(fontname)) == NULL) {
-    printf("Unable to load %s: %s\n", fontname, SDL_GetError());
-    SDL_FreeSurface(surface);
-    return(NULL);
-  }
 
   if (cfg_columns == 40) {
     hzoom = zoom;
@@ -92,13 +89,13 @@ SDL_Surface *gfx_loadfont(char *fontname, int zoom) {
     hzoom = zoom / 2;
   }
 
-  bg = SDL_MapRGB(surface->format, palette[0].r, palette[0].g, palette[0].b);
+  bg = SDL_MapRGB(surface->format, palette[bgcolor].r, palette[bgcolor].g, palette[bgcolor].b);
   for (col = 0; col < 16; ++col) {
     fg = SDL_MapRGB(surface->format, palette[col].r, palette[col].g, palette[col].b);
     for (c = 0; c < 256; ++c) {
       for (y = 0; y < 8; ++y) {
 	for (z1 = 0; z1 < zoom; ++z1) {
-	  sp = (Uint8 *)tempsurface->pixels + (c & 0x1f) * 8 + ((c / 32) * 8 + y) * tempsurface->pitch;
+	  sp = (Uint8 *)srcsurface->pixels + (c & 0x1f) * 8 + ((c / 32) * 8 + y) * srcsurface->pitch;
 	  for (x = 0; x < 8; ++x) {
 	    if (*sp) {
 	      for (z2 = 0; z2 < hzoom; ++z2) {
@@ -115,30 +112,46 @@ SDL_Surface *gfx_loadfont(char *fontname, int zoom) {
       }
     }
   }
-  SDL_FreeSurface(tempsurface);
 
   return(surface);
 }
 
 
-int gfx_init(int zoom, int fullscreen, char *appname) {
+void gfx_destroyfont(SDL_Surface *fontsurface) {
+  SDL_FreeSurface(fontsurface);
+}
+
+
+SDL_Surface *gfx_loadfont(char *fontname) {
+  SDL_Surface *surface;
+
+  if ((surface = SDL_LoadBMP(fontname)) == NULL) {
+    printf("Unable to load %s: %s\n", fontname, SDL_GetError());
+    return(NULL);
+  }
+
+  return(surface);
+}
+
+
+int gfx_init(int fullscreen, char *appname) {
   const SDL_VideoInfo *vidinfo;
 #ifndef WINDOWS
   char fname[1024];
 #endif
 
   if (cfg_columns == 40) {
-    charwidth = 8 * zoom;
+    charwidth = 8 * cfg_zoom;
   } else {
-    if (zoom == 1 || zoom == 3) {
+    if (cfg_zoom == 1 || cfg_zoom == 3) {
       printf("Warning: must use zoom 2 or 4 for 80 column mode\n");
-      zoom = 2;
+      cfg_zoom = 2;
     }
-    charwidth = 4 * zoom;
+    charwidth = 4 * cfg_zoom;
   }
-  charheight = 8 * zoom;
-  gfx_width = zoom * GFX_WIDTH;
-  gfx_height = zoom * GFX_HEIGHT;
+  charheight = 8 * cfg_zoom;
+  gfx_width = cfg_zoom * GFX_WIDTH;
+  gfx_height = cfg_zoom * GFX_HEIGHT;
   borderleft = 0;
   borderright = 0;
 
@@ -163,24 +176,30 @@ int gfx_init(int zoom, int fullscreen, char *appname) {
   SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
 
 #ifdef WINDOWS
-  if ((fontlist[0] = gfx_loadfont("upper.bmp", zoom)) == NULL) {
+  if ((rawfont[0] = gfx_loadfont("upper.bmp")) == NULL) {
     return(1);
   }
-  if ((fontlist[1] = gfx_loadfont("lower.bmp", zoom)) == NULL) {
+  if ((rawfont[1] = gfx_loadfont("lower.bmp")) == NULL) {
     return(1);
   }
 #else
   strncpy(fname, cfg_prefix, 1000);
   strcat(fname, "/share/cgterm/upper.bmp");
-  if ((fontlist[0] = gfx_loadfont(fname, zoom)) == NULL) {
+  if ((rawfont[0] = gfx_loadfont(fname)) == NULL) {
     return(1);
   }
   strncpy(fname, cfg_prefix, 1000);
   strcat(fname, "/share/cgterm/lower.bmp");
-  if ((fontlist[1] = gfx_loadfont(fname, zoom)) == NULL) {
+  if ((rawfont[1] = gfx_loadfont(fname)) == NULL) {
     return(1);
   }
 #endif
+  if (
+      (fontlist[0] = gfx_createfont(rawfont[0], cfg_zoom)) == NULL ||
+      (fontlist[1] = gfx_createfont(rawfont[1], cfg_zoom)) == NULL
+      ) {
+    return(1);
+  }
   font = 1;
   memset(dirty, SDL_FALSE, sizeof(dirty));
 
@@ -194,6 +213,8 @@ int gfx_init(int zoom, int fullscreen, char *appname) {
 
   cursorctr = 0;
   cursorvis = SDL_FALSE;
+
+  gfx_cursdirection = 1;
 
   return(0);
 }
@@ -234,6 +255,10 @@ void gfx_bgcolor(int c) {
   if (bgcolor != c) {
     memset(dirty, SDL_TRUE, sizeof(dirty));
     bgcolor = c;
+    gfx_destroyfont(fontlist[0]);
+    gfx_destroyfont(fontlist[1]);
+    fontlist[0] = gfx_createfont(rawfont[0], cfg_zoom);
+    fontlist[1] = gfx_createfont(rawfont[1], cfg_zoom);
   }
 }
 
@@ -247,6 +272,20 @@ void gfx_fgcolor(int c) {
 void gfx_draw_char(int c) {
   resetcursor();
   gfx_0400[gfx_cursy * cfg_columns + gfx_cursx] = c;
+  gfx_d800[gfx_cursy * cfg_columns + gfx_cursx] = fgcolor;
+  dirty[gfx_cursy] = SDL_TRUE;
+}
+
+
+void gfx_togglerev(void) {
+  resetcursor();
+  gfx_0400[gfx_cursy * cfg_columns + gfx_cursx] ^= 0x80;
+  dirty[gfx_cursy] = SDL_TRUE;
+}
+
+
+void gfx_updatecolor(void) {
+  resetcursor();
   gfx_d800[gfx_cursy * cfg_columns + gfx_cursx] = fgcolor;
   dirty[gfx_cursy] = SDL_TRUE;
 }
@@ -479,6 +518,26 @@ void gfx_cursdown(void) {
 }
 
 
+void gfx_cursadvance(void) {
+  switch (gfx_cursdirection) {
+  case 0:
+    break;
+  case 1:
+    gfx_cursright();
+    break;
+  case 2:
+    gfx_cursdown();
+    break;
+  case 3:
+    gfx_cursleft();
+    break;
+  case 4:
+    gfx_cursup();
+    break;
+  }
+}
+
+
 void gfx_delete(void) {
   int x;
   unsigned char *rowchar = &gfx_0400[gfx_cursy * cfg_columns];
@@ -547,4 +606,46 @@ void gfx_toggle_fullscreen(void) {
 void gfx_set_offset(int offset) {
   gfx_offset = offset;
   memset(dirty, SDL_TRUE, sizeof(dirty));
+}
+
+
+void gfx_copy_rect(int rect_x, int rect_y, int rect_w, int rect_h, unsigned char *rect_0400, unsigned char *rect_d800) {
+  int x, y;
+
+  resetcursor();
+  for (y = 0; y < rect_h; ++y) {
+    dirty[rect_y + y] = SDL_TRUE;
+    for (x = 0; x < rect_w; ++x) {
+      *rect_0400++ = gfx_0400[(rect_y + y) * cfg_columns + rect_x + x];
+      *rect_d800++ = gfx_d800[(rect_y + y) * cfg_columns + rect_x + x];
+    }
+  }
+}
+
+
+void gfx_clear_rect(int rect_x, int rect_y, int rect_w, int rect_h) {
+  int x, y;
+
+  resetcursor();
+  for (y = 0; y < rect_h; ++y) {
+    dirty[rect_y + y] = SDL_TRUE;
+    for (x = 0; x < rect_w; ++x) {
+      gfx_0400[(rect_y + y) * cfg_columns + rect_x + x] = 32;
+      gfx_d800[(rect_y + y) * cfg_columns + rect_x + x] = fgcolor;
+    }
+  }
+}
+
+
+void gfx_paste_rect(int rect_x, int rect_y, int rect_w, int rect_h, unsigned char *rect_0400, unsigned char *rect_d800) {
+  int x, y;
+
+  resetcursor();
+  for (y = 0; y < rect_h; ++y) {
+    dirty[rect_y + y] = SDL_TRUE;
+    for (x = 0; x < rect_w; ++x) {
+      gfx_0400[(rect_y + y) * cfg_columns + rect_x + x] = *rect_0400++;
+      gfx_d800[(rect_y + y) * cfg_columns + rect_x + x] = *rect_d800++;
+    }
+  }
 }

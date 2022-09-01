@@ -1,4 +1,8 @@
 PREFIX=/usr/local
+
+# for Mac OS
+#PREFIX=/opt/cgterm
+
 EXESUFFIX=
 SOCKETLIBS=
 
@@ -81,8 +85,10 @@ install: all installdirs
 	cp cgedit$(EXESUFFIX) $(PREFIX)/bin/
 	cp *.bmp *.kbd *.wav $(PREFIX)/share/cgterm/
 
-installdirs: $(PREFIX)/bin $(PREFIX)/share $(PREFIX)/share/cgterm $(PREFIX)/etc
+installdirs: $(PREFIX) $(PREFIX)/bin $(PREFIX)/share $(PREFIX)/share/cgterm $(PREFIX)/etc
 
+$(PREFIX):
+	mkdir $(PREFIX) > /dev/null 2>&1
 $(PREFIX)/bin:
 	mkdir $(PREFIX)/bin > /dev/null 2>&1
 $(PREFIX)/share:

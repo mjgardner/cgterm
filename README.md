@@ -13,6 +13,13 @@ if it's not included with your OS.
 
 Edit the supplied `Makefile` as needed, then run `make`, and `make install`.
 
+Installation (Mac OS)
+-------------------
+
+As above, cgterm requires SDL. To install SDL, you can use either [Homebrew](https://brew.sh/) or [MacPorts](https://www.macports.org/), or compile it yourself. You will also need the Xcode command-line tools.
+
+Next, edit `Makefile`, and specify the correct destination directory, as per the comment in the file. Last, run `make`, and `make install`.
+
 Usage
 -----
 

@@ -1,6 +1,10 @@
 CGTerm - a platform independent C/G terminal
 ================================================
 
+> [!NOTE]
+> Issues and contributions for this fork are tracked at [forgejo.phoenixtrap.com/mjg/cgterm](https://forgejo.phoenixtrap.com/mjg/cgterm).
+> The GitHub repository is a read-only mirror.
+
 As the title says, CGTerm is an open source, platform independent
 terminal program for C/G telnet BBS:s. It's supposed to compile and
 run on any POSIX compliant OS with the SDL library installed.
